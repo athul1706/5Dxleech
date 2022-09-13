@@ -143,6 +143,7 @@ async def restart(client, message:Message):
         LOGGER.info("[HEROKU] Dyno Restarting...")
         restart_message = await message.reply_text("__Dyno Restarting...__")
         await app.stop()
+        if STRING_SESSION: await userBot.stop()
         heroku_conn = from_apikey(HEROKU_API_KEY)
         appx = heroku_conn.app(HEROKU_APP_NAME)
         appx.restart()
@@ -176,6 +177,7 @@ if __name__ == "__main__":
     # Start The Bot >>>>>>>
     for a in app:
         a.start()
+    if STRING_SESSION: userBot.start()
 
     # Pixabay API >>>>>>>>
     if PIXABAY_API_KEY:
@@ -305,10 +307,10 @@ if __name__ == "__main__":
     for a in app:
         logging.info(f"{(a.get_me()).first_name} [@{(a.get_me()).username}] has Started Running...🏃💨💨")
     if STRING_SESSION:
-        with userBot:
             logging.info(f"User : {(userBot.get_me()).first_name} has Started Revolving...♾️⚡️")
 
     idle()
 
     for a in app:
         a.stop()
+    if STRING_SESSION: userBot.stop()
